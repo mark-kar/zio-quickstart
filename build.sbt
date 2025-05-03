@@ -1,5 +1,6 @@
 scalaVersion := "3.3.5"
 Test / fork  := true
+name := "zio-quickstart"
 
 libraryDependencies ++= Seq(
   "dev.zio"       %% "zio"              % "2.1.1",
