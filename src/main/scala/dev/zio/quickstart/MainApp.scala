@@ -12,17 +12,21 @@ import zio._
 import zio.http._
 
 object MainApp extends ZIOAppDefault:
+
   def run =
-    Server
-      .serve(
-        GreetingRoutes() ++ DownloadRoutes() ++ CounterRoutes() ++ UserRoutes()
-      )
-      .provide(
-        Server.defaultWithPort(8080),
+    for {
+      port <- System.env("PORT").map(_.map(_.toInt).getOrElse(8080))
+      _ <- Server
+        .serve(
+          GreetingRoutes() ++ DownloadRoutes() ++ CounterRoutes() ++ UserRoutes()
+        )
+        .provide(
+          Server.defaultWithPort(port),
 
-        // An layer responsible for storing the state of the `counterApp`
-        ZLayer.fromZIO(Ref.make(0)),
+          // An layer responsible for storing the state of the `counterApp`
+          ZLayer.fromZIO(Ref.make(0)),
 
-        // To use the persistence layer, provide the `PersistentUserRepo.layer` layer instead
-        InmemoryUserRepo.layer
-      )
+          // To use the persistence layer, provide the `PersistentUserRepo.layer` layer instead
+          InmemoryUserRepo.layer
+        )
+    } yield ()
