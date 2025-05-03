@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/zio-quickstart
+web: target/universal/stage/bin/zio-quickstart -Dhttp.port=$PORT
